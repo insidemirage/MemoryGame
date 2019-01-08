@@ -12,8 +12,10 @@ function Random(mass){
     }
 }
 function DeleteCard(card, cardt){
-    $('.card').eq(card).css('opacity','0'); //Функция просто скрывает элемент(это позволяет избежать сдвигов)
-    $('.card').eq(cardt).css('opacity','0');
+    setTimeout(function(){
+    $('.card').eq(card).addClass('card--invisible');//Функция просто скрывает элемент(это позволяет избежать сдвигов)
+     $('.card').eq(cardt).addClass('card--invisible');//Функция просто скрывает элемент(это позволяет избежать сдвигов)
+    }, 400);
 }
 $(document).ready(function(){
     
@@ -29,11 +31,21 @@ $(document).ready(function(){
         clickcounter++;
         if(clickcounter==2){ // Если произошел клик на второй карте
             clickcounter = 0;
-            if(answers[lastcard]==answers[$(this).index()]) DeleteCard(lastcard, $(this).index()); //Если совпали , то удаляем карточки 
+            if(answers[lastcard]==answers[$(this).index()]){
+                $(this).css('background-image', 'url(img/'+(answers[$(this).index()]+1)+'.png)');
+                DeleteCard(lastcard, $(this).index());
+            }
+            else{
+                $(this).css('background-image', 'url(img/'+(answers[$(this).index()]+1)+'.png)')
+                setTimeout(function(){
+                    $('.card').css('background-image','');
+                }, 400);
+            }
         }
         else{
             lastcard = $(this).index(); // Сброс предыдущей карты
-
+            let img = answers[lastcard]+1;
+            $(this).css('background-image', 'url(img/'+img+'.png)')
         }
     });
 });

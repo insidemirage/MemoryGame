@@ -23,5 +23,10 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 1px 6px 40px black;
-
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.card--invisible{
+    opacity: 0;
 }
