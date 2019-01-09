@@ -1,7 +1,7 @@
 var counter = 0;
 var before = 0;
-var clickcounter = 0; // Число сделанных кликов
-var lastcard; // Индекс предыдущей карточки
+var secondClick = false; // Вторая карточка?
+var lastCard; // Индекс предыдущей карточки
 function Random(mass){
     let r = Math.round(Math.random() * (11 - 0) + 0); // Выбираем рандомный элемент массива от 11 до 0
     if(mass[r]==undefined){
@@ -13,12 +13,12 @@ function Random(mass){
 }
 function DeleteCard(card, cardt){
     setTimeout(function(){
-    $('.card').eq(card).addClass('card--invisible');//Функция просто скрывает элемент(это позволяет избежать сдвигов)
-     $('.card').eq(cardt).addClass('card--invisible');//Функция просто скрывает элемент(это позволяет избежать сдвигов)
+    $('.card').eq(card).addClass('card--invisible');
+     $('.card').eq(cardt).addClass('card--invisible');
     }, 400);
 }
 $(document).ready(function(){
-    
+
     var answers = new Array(12); // Массив для ответов
     $.each(answers, function(index,elem){
         answers[Random(answers)] = counter; //К выбранному с помощью функции элементу присваиваем ответ
@@ -26,26 +26,22 @@ $(document).ready(function(){
             counter++;
        }
     });
-    console.log(answers);
-    $('.card').click(function(){
-        clickcounter++;
-        if(clickcounter==2){ // Если произошел клик на второй карте
-            clickcounter = 0;
-            if(answers[lastcard]==answers[$(this).index()]){
+    $('.card').click(function() {
+        if (secondClick) {
+            if (answers[lastCard]==answers[$(this).index()]) {
                 $(this).css('background-image', 'url(img/'+(answers[$(this).index()]+1)+'.png)');
-                DeleteCard(lastcard, $(this).index());
-            }
-            else{
+                DeleteCard(lastCard, $(this).index());
+            } else {
                 $(this).css('background-image', 'url(img/'+(answers[$(this).index()]+1)+'.png)')
-                setTimeout(function(){
+                setTimeout(function() {
                     $('.card').css('background-image','');
                 }, 400);
             }
-        }
-        else{
-            lastcard = $(this).index(); // Сброс предыдущей карты
-            let img = answers[lastcard]+1;
+        } else {
+            lastCard = $(this).index();
+            let img = answers[lastCard]+1;
             $(this).css('background-image', 'url(img/'+img+'.png)')
         }
+        secondClick = !secondClick;
     });
 });
