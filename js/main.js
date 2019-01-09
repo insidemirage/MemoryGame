@@ -3,15 +3,7 @@ var before = 0;
 var secondClick = false; // Вторая карточка?
 var lastCard; // Индекс предыдущей карточки
 var answers = new Array(12); // Массив для ответов
-
-function Game(){
-    $.each(answers, function(index,elem){
-        answers[Random(answers)] = counter; //К выбранному с помощью функции элементу присваиваем ответ
-        if(index != 0 && index % 2 != 0 ){ // Если номер элемента не 0 и является нечетным(каждый второй элемент), то увеличиваем счетчик
-            counter++;
-       }
-    });
-}
+var cardcounter = 0;
 function ShowCard(elem){
     $(elem).css('background-image', 'url(img/'+(answers[$(elem).index()]+1)+'.png)');
 }
@@ -28,8 +20,23 @@ function HideCard(){
 function DeleteCard(card, cardt){
     setTimeout(function(){
     $('.card').eq(card).addClass('card--invisible');
-     $('.card').eq(cardt).addClass('card--invisible');
+    $('.card').eq(cardt).addClass('card--invisible');
+     cardcounter++;
+     if(cardcounter == 6){
+        $.each(answers, function(index){answers[index]=undefined});
+        $('.card--invisible').removeClass('card--invisible');
+        counter = 0;
+        Game();
+        cardcounter = 0;
+    }
     }, 400);
+}
+function Game(){
+    $.each(answers, function(index,elem){
+        answers[Random(answers)] = counter; //К выбранному с помощью функции элементу присваиваем ответ
+        counter = (index != 0 && index % 2 != 0) ? counter+1:counter; 
+    });
+    HideCard();
 }
 $(document).ready(function(){
     Game();
@@ -37,7 +44,7 @@ $(document).ready(function(){
         if (secondClick) {
             if (answers[lastCard]==answers[$(this).index()]) {
                 ShowCard(this);
-                DeleteCard(lastCard, $(this).index());
+                DeleteCard(lastCard, $(this).index()); 
             } else {
                 ShowCard(this);
                 setTimeout(HideCard, 400);
