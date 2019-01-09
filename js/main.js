@@ -41,17 +41,15 @@ function Game(){
 $(document).ready(function(){
     Game();
     $('.card').click(function() {
+        ShowCard(this);
         if (secondClick) {
             if (answers[lastCard]==answers[$(this).index()]) {
-                ShowCard(this);
                 DeleteCard(lastCard, $(this).index()); 
             } else {
-                ShowCard(this);
                 setTimeout(HideCard, 400);
             }
         } else {
             lastCard = $(this).index();
-            ShowCard(this);
         }
         secondClick = !secondClick;
     });
